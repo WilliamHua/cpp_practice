@@ -10,8 +10,15 @@
 using namespace std;
 
 vector<int> traversal;
-vector< vector<int> > cities(int x, int y){
+vector< vector<int> > distances;
+
+vector< vector<int> > getDistances(int x, int y){
     vector< vector<int> > cities(x, vector<int>(y));
+    for(int i = 0; i < x*y; i++){
+        for(int j = 0; j < x*y; j++){ 
+            cities[i][j] = rand() % 1000 + 1;
+        }
+    }
     return cities;
 }
 
@@ -25,13 +32,11 @@ void swap(vector<int>& data, int a, int b){
 }
 
 int main(){
-    vector<int> test(4, 100);
-    test.at(0) = 50;
-    cout << "Original first: " << test.at(0) << endl;
-    cout << "Original second: " << test.at(1) << endl;
-    swap(test, 0, 1);
-    cout << test.at(0) << endl;
-    cout << test.at(1) << endl;
+    distances = getDistances(10, 10);
+    for(int x = 0; x < distances.size(); x++){
+        cout << distances[0][x] << endl; 
+    }
+    //print out all of this 
     return 0;
 }
 
