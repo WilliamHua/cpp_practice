@@ -12,13 +12,13 @@ using namespace std;
 
 vector<int> traversal;
 vector< vector<int> > distances; //distance matrix between two cities
-int cityNums = 100;
+int cityNums = 10;
 
 vector< vector<int> > genDistances(int numCities){
     vector< vector<int> > cities(numCities, vector<int>(numCities));
     for(int i = 0; i < numCities; i++){
         for(int j = 0; j < i; j++){ 
-            cities[i][j] = rand() % 1000 + 1;
+            cities[i][j] = rand() % 10000 + 1; //range of random
             //dist between a and b in this case is same as dist between b and a
             cities[j][i] = cities[i][j]; 
         }
@@ -44,10 +44,10 @@ vector<int> swap(vector<int> data, int a, int b){
 }
 
 vector<int> randSolution(){
-    int solution[100] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};//cityNums
-    vector<int> randSolution(&solution[0], &solution[0] + 100);
-    random_shuffle(randSolution.begin(), randSolution.end());
-    return randSolution;
+    int path[10] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}; //cityNums
+    vector<int> randPath(&path[0], &path[0] + 10); //cityNums FIXME: get length of array
+    random_shuffle(randPath.begin(), randPath.end());
+    return randPath;
 }
 
 vector<int> climbHill(int numIterations, vector<int> traversal, vector< vector<int> > distances){
@@ -65,17 +65,25 @@ vector<int> climbHill(int numIterations, vector<int> traversal, vector< vector<i
             counter++;
         }
     }
-    return new_traversal;
+    return traversal;
 }
 
 int main(){
     srand(time(NULL));
-    distances = genDistances(cityNums);
-    traversal = randSolution(); 
-    cout << "The original solution had a distance of: " << genDistance(traversal, distances) << endl;
-    traversal = climbHill(100000, traversal, distances);
-    cout << "The new solution has a distance of: " << genDistance(traversal, distances) << endl;
-    
+    int originalSolution;
+    int newSolution;
+    //for(int x = 0; x < 1000; x++) {
+        distances = genDistances(cityNums);
+        traversal = randSolution(); 
+        originalSolution = genDistance(traversal, distances);
+        traversal = climbHill(10000, traversal, distances);
+        newSolution = genDistance(traversal, distances); 
+
+        //if(newSolution > originalSolution) {
+            cout << "The original solution had a distance of: " << originalSolution << endl;
+            cout << "The new solution has a distance of: " << newSolution << endl;
+        //}
+    //}
     return 0;
 }
 
