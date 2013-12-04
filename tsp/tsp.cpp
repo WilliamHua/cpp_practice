@@ -11,44 +11,66 @@
 #include <stdlib.h>
 #include <algorithm>
 #include <vector>
-using namespace std;
 
-vector<int> traversal;
-vector< vector<int> > distances; 
-int cityNums = 10;
+#include "City.h"
+
+//std::vector<int> traversal;
+//std::vector< std::vector<int> > distances; 
+//int cityNums = 10;
 
 //I want to be able to output the results to a csv too
 
-vector<int> climbHill(int numIterations, vector<int> traversal, vector< vector<int> > distances){
-    int counter = 0;
-    vector<int> new_traversal;
-    while(counter < numIterations){
-        int y = rand() % cityNums;
-        int x = rand() % cityNums;
-        while(x == y) y = rand() % cityNums;
-        new_traversal = swap(traversal, x, y);
-        if(genDistance(new_traversal, distances) < genDistance(traversal, distances)){
-            counter = 0;
-            traversal = new_traversal;
-        }else{
-            counter++;
-        }
-    }
-    return traversal;
-}
+/**
+ * Swaps a and b from input vector, and returns the new vector
+ * 
+ * @param data      input vector to swap from
+ * @param a         index of first thing to switch
+ * @param b         index of the second thing to switch
+ */
+
+//std::vector<int> swap(std::vector<int> data, int a, int b) {
+//    std::vector<int> new_data(data.size());
+//    new_data = data;
+//    int x = new_data.at(a);
+//    new_data.at(a) = new_data.at(b);
+//    new_data.at(b) = x;
+//    return new_data;
+//}
+//
+//std::vector<int> climbHill(int (*costFunction)(std::vector<int>, std::vector< std::vector <int> >), int numIterations, std::vector<int> traversal, std::vector< std::vector<int> > distances){
+//    int counter = 0;
+//    std::vector<int> new_traversal;
+//    while(counter < numIterations){
+//        int y = rand() % 10;//(sizeof(traversal)/sizeof(*traversal)); //FIXME: hack
+//        int x = rand() % 10;//(sizeof(traversal)/sizeof(*traversal));
+//        while(x == y) y = rand() % 10;//(sizeof(traversal) / sizeof(*traversal));
+//        new_traversal = swap(traversal, x, y);
+//        if((*costFunction)(new_traversal, distances) < (*costFunction)(traversal, distances)){
+//            counter = 0;
+//            traversal = new_traversal;
+//        }else{
+//            counter++;
+//        }
+//    }
+//    return traversal;
+//}
 
 int main(){
     srand(time(NULL));
-    int originalSolution;
-    int newSolution;
-    distances = genDistances(cityNums);
-    traversal = randSolution(); 
-    originalSolution = genDistance(traversal, distances);
-    traversal = climbHill(10000, traversal, distances);
-    newSolution = genDistance(traversal, distances); 
+    //int originalSolution;
+    //int newSolution;
+    
+    //City test(10);
+    //test.genDistances();
+    //std::vector<int> traversal = test.randSolution(); 
+    //distances = genDistances(cityNums);
+    //traversal = randSolution(); 
+    //originalSolution = genDistance(traversal, distances);
+    //traversal = climbHill(10000, traversal, distances);
+    //newSolution = genDistance(traversal, distances); 
 
-    cout << "The original solution had a distance of: " << originalSolution << endl;
-    cout << "The new solution has a distance of: " << newSolution << endl;
+    //cout << "The original solution had a distance of: " << originalSolution << endl;
+    //cout << "The new solution has a distance of: " << newSolution << endl;
     return 0;
 }
 
