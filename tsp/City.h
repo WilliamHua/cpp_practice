@@ -10,7 +10,10 @@ struct City {
         City(int c=10): cityNums(c){};
         std::vector<int> randSolution();
         void genDistances();
-        int getDistance(std::vector<int> traversal);
+        int getDistance(const std::vector<int>& traversal);
+        //friend std::ostream& operator<<(ostream&, const City&) {
+        //    for 
+        //}
 };
 
 

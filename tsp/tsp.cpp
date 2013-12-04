@@ -8,11 +8,13 @@
  */ 
 
 #include <iostream>
-#include <stdlib.h>
+#include <functional>
 #include <algorithm>
 #include <vector>
 
 #include "City.h"
+
+using namespace std::placeholders;
 
 //std::vector<int> traversal;
 //std::vector< std::vector<int> > distances; 
@@ -27,50 +29,54 @@
  * @param a         index of first thing to switch
  * @param b         index of the second thing to switch
  */
+std::vector<int> swap(const std::vector<int>& data, int a, int b) {
+    std::vector<int> new_data(data.size());
+    new_data = data;
+    int x = new_data.at(a);
+    new_data.at(a) = new_data.at(b);
+    new_data.at(b) = x;
+    return new_data;
+}
 
-//std::vector<int> swap(std::vector<int> data, int a, int b) {
-//    std::vector<int> new_data(data.size());
-//    new_data = data;
-//    int x = new_data.at(a);
-//    new_data.at(a) = new_data.at(b);
-//    new_data.at(b) = x;
-//    return new_data;
-//}
-//
-//std::vector<int> climbHill(int (*costFunction)(std::vector<int>, std::vector< std::vector <int> >), int numIterations, std::vector<int> traversal, std::vector< std::vector<int> > distances){
-//    int counter = 0;
-//    std::vector<int> new_traversal;
-//    while(counter < numIterations){
-//        int y = rand() % 10;//(sizeof(traversal)/sizeof(*traversal)); //FIXME: hack
-//        int x = rand() % 10;//(sizeof(traversal)/sizeof(*traversal));
-//        while(x == y) y = rand() % 10;//(sizeof(traversal) / sizeof(*traversal));
-//        new_traversal = swap(traversal, x, y);
-//        if((*costFunction)(new_traversal, distances) < (*costFunction)(traversal, distances)){
-//            counter = 0;
-//            traversal = new_traversal;
-//        }else{
-//            counter++;
-//        }
-//    }
-//    return traversal;
-//}
+std::vector<int> climbHill(std::function<int(const std::vector<int>&)> costFunction, int numIterations, std::vector<int> traversal){
+    int counter = 0;
+    std::vector<int> new_traversal;
+    while(counter < numIterations){
+        int y = rand() % traversal.size();
+        int x = rand() % traversal.size();
+        while(x == y) y = rand() % traversal.size();
+        new_traversal = swap(traversal, x, y);
+        if(costFunction(new_traversal) < costFunction(traversal)){
+            counter = 0;
+            traversal = new_traversal;
+        }else{
+            counter++;
+        }
+    }
+    return traversal;
+}
 
 int main(){
     srand(time(NULL));
-    //int originalSolution;
-    //int newSolution;
     
-    //City test(10);
-    //test.genDistances();
-    //std::vector<int> traversal = test.randSolution(); 
-    //distances = genDistances(cityNums);
-    //traversal = randSolution(); 
-    //originalSolution = genDistance(traversal, distances);
-    //traversal = climbHill(10000, traversal, distances);
-    //newSolution = genDistance(traversal, distances); 
+    City test(10);
+    test.genDistances();
+    std::vector<int> traversal = test.randSolution(); 
+    int oldSolution = test.getDistance(traversal);
+    for (int i : traversal) {
+        std::cout << i << " ";
+    }
 
-    //cout << "The original solution had a distance of: " << originalSolution << endl;
-    //cout << "The new solution has a distance of: " << newSolution << endl;
+    std::cout << std::endl;
+    traversal = climbHill(std::bind(&City::getDistance, test, _1), 10000, traversal);
+    int newSolution = test.getDistance(traversal);
+    
+    for (int i : traversal) {
+        std::cout << i << " ";
+    }
+
+    std::cout << "The original solution had a distance of: " << oldSolution << std::endl;
+    std::cout << "The new solution has a distance of: " << newSolution << std::endl;
     return 0;
 }
 
