@@ -13,70 +13,52 @@
 #include <vector>
 
 #include "City.h"
+#include "HillClimbing.h"
+#include "Anneal.h"
 
 using namespace std::placeholders;
 
-//std::vector<int> traversal;
-//std::vector< std::vector<int> > distances; 
-//int cityNums = 10;
-
 //I want to be able to output the results to a csv too
 
-/**
- * Swaps a and b from input vector, and returns the new vector
- * 
- * @param data      input vector to swap from
- * @param a         index of first thing to switch
- * @param b         index of the second thing to switch
- */
-std::vector<int> swap(const std::vector<int>& data, int a, int b) {
-    std::vector<int> new_data(data.size());
-    new_data = data;
-    int x = new_data.at(a);
-    new_data.at(a) = new_data.at(b);
-    new_data.at(b) = x;
-    return new_data;
-}
-
-std::vector<int> climbHill(std::function<int(const std::vector<int>&)> costFunction, int numIterations, std::vector<int> traversal){
-    int counter = 0;
-    std::vector<int> new_traversal;
-    while(counter < numIterations){
-        int y = rand() % traversal.size();
-        int x = rand() % traversal.size();
-        while(x == y) y = rand() % traversal.size();
-        new_traversal = swap(traversal, x, y);
-        if(costFunction(new_traversal) < costFunction(traversal)){
-            counter = 0;
-            traversal = new_traversal;
-        }else{
-            counter++;
-        }
-    }
-    return traversal;
-}
+//FIXME: for City, generate a list 1...n
 
 int main(){
-    srand(time(NULL));
-    
     City test(10);
-    test.genDistances();
-    std::vector<int> traversal = test.randSolution(); 
-    int oldSolution = test.getDistance(traversal);
-    for (int i : traversal) {
-        std::cout << i << " ";
-    }
+    int oldSolution;
+    int newSolution;
+    std::cout << "Running 100 tests for hill climbing" << std::endl;
 
-    std::cout << std::endl;
-    traversal = climbHill(std::bind(&City::getDistance, test, _1), 10000, traversal);
-    int newSolution = test.getDistance(traversal);
+    for(int x = 0; x < 100; x++) {
+        HillClimbing hc;
+        test.genDistances();
+        std::vector<int> traversal = test.randSolution(); 
+        oldSolution = test.getDistance(traversal);
+        traversal = hc.climbHill(std::bind(&City::getDistance, test, _1), 10000, traversal);
+        newSolution = test.getDistance(traversal);
+        if(oldSolution > newSolution) {
+            std::cout << ".";
+        } else {
+            std::cout << "E";
+        }
+    }
     
-    for (int i : traversal) {
-        std::cout << i << " ";
+    std::cout << std::endl << "Running 100 tests for simulated annealing" << std::endl;
+    for(int x = 0; x < 100; x++) {
+        Anneal an;
+        test.genDistances();
+        std::vector<int> traversal = test.randSolution();
+        oldSolution = test.getDistance(traversal);
+        traversal = an.optimize(std::bind(&City::getDistance, test, _1), traversal);
+        newSolution = test.getDistance(traversal);
+        if(oldSolution > newSolution) {
+            //std::cout << ".";
+            std::cout << "Old solution: " << oldSolution << std::endl;
+            std::cout << "New solution: " << newSolution << std::endl;
+        } else {
+            std::cout << "E";
+        }
     }
-
-    std::cout << "The original solution had a distance of: " << oldSolution << std::endl;
-    std::cout << "The new solution has a distance of: " << newSolution << std::endl;
+    std::cout << std::endl;
     return 0;
 }
 

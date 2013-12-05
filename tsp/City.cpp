@@ -20,12 +20,12 @@ void City::genDistances() {
         }
     }
 
-    for (int i = 0; i < cityNums; i++) {
-        for (int j = 0; j < cityNums; j++) {
-            std::cout << cities[i][j] << ' ';
-        }
-        std::cout << std::endl;
-    }
+    //for (int i = 0; i < cityNums; i++) {
+    //    for (int j = 0; j < cityNums; j++) {
+    //        std::cout << cities[i][j] << ' ';
+    //    }
+    //    std::cout << std::endl;
+    //}
     this->distances = cities;
 }
 
