@@ -18,6 +18,16 @@
 
 using namespace std::placeholders;
 
+// ---- FUNCTIONS ----
+std::vector<int> swap(const std::vector<int>& data, int a, int b) {
+    std::vector<int> new_data(data.size());
+    new_data = data;
+    int x = new_data.at(a);
+    new_data.at(a) = new_data.at(b);
+    new_data.at(b) = x;
+    return new_data;
+}
+
 //I want to be able to output the results to a csv too
 
 //FIXME: for City, generate a list 1...n
